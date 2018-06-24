@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Title: {{ book.title }}</h1>
+
+  <p><strong>Author:</strong> <a href="">{{ book.author }}</a></p> <!-- author detail link not yet defined -->
+  <p><strong>Summary:</strong> {{ book.summary }}</p>
+  <p><strong>Language:</strong> {{ book.language }}</p>
+  <p><strong>Genre:</strong> {{ book.genre }}</p> 
+  <p><strong>Tags:</strong> {% for tag in book.tag.all %} {{ tag }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+  <p><strong>Book format:</strong> {{ book.get_book_format_display }}</p> 
+  <p><strong>Read date:</strong> {{ book.read_date }}</p> 
+
+  {% if perms.libraryapp.can_edit %}
+  <a href="{% url 'book_update' book.id %}">Update</a> |
+  <a href="{% url 'book_delete' book.id %}">Delete</a>
+  {% endif %}
+
+{% endblock %}

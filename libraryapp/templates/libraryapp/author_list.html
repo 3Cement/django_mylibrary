@@ -1,0 +1,26 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Authors List</h1>
+
+    {% if author_list %}
+    <ul>
+
+      {% for author in author_list %}
+      <li>
+        <a href="{{ author.get_absolute_url }}">{{ author.last_name }}</a> {{ author.first_name }} |
+        {% if perms.libraryapp.can_edit %}
+          <a href="{% url 'author_update' author.id %}">Update</a> |
+          <a href="{% url 'author_delete' author.id %}">Delete</a>
+        {% endif %}
+      </li>
+      {% endfor %}
+      {% if perms.libraryapp.can_edit %}
+        <a href="{% url 'author_form' %}">Create new author</a>
+      {% endif %}
+
+    </ul>
+    {% else %}
+      <p>There are no books in the library.</p>
+    {% endif %}       
+{% endblock %}

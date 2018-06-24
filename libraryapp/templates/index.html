@@ -1,0 +1,26 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Local Library Home</h1>
+
+  <p>Welcome to <em>MyLibrary</em>, a very basic Django website developed to practice working with Django, I will use this website as my personal library. Enjoy!</p>
+
+<h2>Dynamic content</h2>
+
+  <p>The library has the following record counts:</p>
+  <ul>
+    <li><strong>Books:</strong> {{ num_books }}</li>
+    <li><strong>Authors:</strong> {{ num_authors }}</li>
+    <li><strong>Tags:</strong> {{ num_tags }}</li>
+    <li><strong>Genres:</strong> {{ num_genres }}</li>
+    <li><strong>Languages:</strong> {{ num_languages }}, Polish: {{ num_polish }} 
+    and English: {{ num_english }}</li>
+    <li><strong>3 Book formats:</strong> paperback: {{ num_paperbacks }},
+    ebooks: {{ num_ebooks }}, audiobooks: {{ num_audiobooks }}</li>
+    <li><strong>Books read in 2018:</strong> {{ read_in_2018 }}</li>
+    <li><strong>Books read in 2017:</strong> {{ read_in_2017 }}</li>
+    <li><strong>Books read before...:</strong> {{ read_before }}</li>
+  </ul>
+  <p>You have visited this page {{ num_visits }}{% if num_visits == 1 %} time{% else %} times{% endif %}.</p>
+
+{% endblock %}

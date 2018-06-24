@@ -1,0 +1,26 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>Tags List</h1>
+
+    {% if tag_list %}
+    <ul>
+
+      {% for tag in tag_list %}
+      <li>
+        <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
+        {% if perms.libraryapp.can_edit %}
+          <a href="{% url 'tag_update' tag.id %}">Update</a> |
+          <a href="{% url 'tag_delete' tag.id %}">Delete</a>
+        {% endif %}
+      </li>
+      {% endfor %}
+      {% if perms.libraryapp.can_edit %}
+        <a href="{% url 'tag_form' %}">Create new author</a>
+      {% endif %}
+
+    </ul>
+    {% else %}
+      <p>There are no books in the library.</p>
+    {% endif %}       
+{% endblock %}

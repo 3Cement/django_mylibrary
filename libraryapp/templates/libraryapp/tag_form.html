@@ -1,0 +1,15 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+	<br/>
+	<p>Create new tag</p>
+	<form method="post" novalidate>
+	  {% csrf_token %}
+	  <table>
+	  	{{ form }}
+		{{ form.media }}
+	  </table>
+	  <button type="submit">Create Tag</button>
+	</form>
+
+{% endblock %} 

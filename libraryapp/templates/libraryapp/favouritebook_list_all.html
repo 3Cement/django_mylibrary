@@ -1,0 +1,19 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>All Favourite Books</h1>
+
+    {% if favouritebook_list %}
+    <ul>
+
+      {% for favbook in favouritebook_list %}
+        <li><a href="{% url 'favbook-detail' favbook.id %}">{{ favbook.book }}, {{ favbook.liking }}</a>
+          {% if user.is_staff %}- {{ favbook.liking }}{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+
+    {% else %}
+      <p>There are no favourite books.</p>
+    {% endif %}       
+{% endblock %}

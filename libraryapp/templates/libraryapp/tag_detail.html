@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+
+	<h1>Tag: {{ tag }} </h1>
+
+	<div style="margin-left:20px;margin-top:20px">
+	<h4>Books</h4>
+
+	<dl>
+	{% for book in tag.book_set.all %}
+	  <dt><a href="{% url 'tag-detail' book.pk %}">{{book}}</a>
+	  <dd>{{book.genre}}</dd>
+	{% endfor %}
+	</dl>
+	{% if perms.libraryapp.can_edit %}
+	  <a href="{% url 'tag_update' tag.id %}">Update</a> |
+	  <a href="{% url 'tag_delete' tag.id %}">Delete</a>
+	{% endif %}
+
+	</div>
+{% endblock %}
