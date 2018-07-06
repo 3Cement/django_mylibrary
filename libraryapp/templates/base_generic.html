@@ -63,6 +63,13 @@
       </div>
       <div class="col-sm-10 ">
 {% endif %}
+
+{% if messages %}
+  {% for message in messages %}
+    <h2>{{ message }}</h2>
+  {% endfor %}
+{% endif %}
+
       {% block content %}{% endblock %}
       {% block pagination %}
         {% if is_paginated %}

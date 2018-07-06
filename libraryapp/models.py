@@ -1,7 +1,8 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
-from datetime import date
+import datetime
+from django.core.exceptions import ValidationError
 
 class Tag(models.Model):
     """Model representing a Language (e.g. English, French, Japanese, etc.)"""
@@ -57,14 +58,23 @@ class Book(models.Model):
     	('a', 'Audiobook'),
     	)
     book_format = models.CharField(max_length=1, choices=formats, blank=True, default='p', help_text='Book format')
-    read_date = models.DateField(null=True, blank=True)
+    read_date = models.DateField(help_text='Enter a read date in the past', null=True, blank=True)
 
+    def __init__(self, *args, **kwargs):
+        super(Book, self).__init__(*args, **kwargs)
+        self.__old_read_date = self.read_date
+    
     class Meta:
         ordering = ['-id']
 
     def get_absolute_url(self):
         """Returns the url to access a detail record for this book."""
         return reverse('book-detail', args=[str(self.id)])
+
+    def clean(self):
+        " Make sure date cannot be in the past "
+        if (not self.id or self.__old_read_date != self.read_date) and self.read_date >= datetime.date.today():           
+            raise ValidationError('Read date cannot be in the future - MODELS.')
 
     def __str__(self):
         """String for representing the Book object."""

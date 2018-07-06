@@ -4,7 +4,8 @@ from django.test import TestCase
 
 import datetime
 from django.utils import timezone
-from libraryapp.forms import AuthorForm
+from libraryapp.forms import AuthorForm, BookForm
+from libraryapp.models import Author, Book, Genre, Language, Tag, FavouriteBook
 
 class AuthorFormTest(TestCase):
 
@@ -15,37 +16,25 @@ class AuthorFormTest(TestCase):
     def test_author_form_last_name_field_label(self):
         form = AuthorForm()        
         self.assertTrue(form.fields['last_name'].label == None or form.fields['last_name'].label == 'Surname')
-'''
-    def test_author_form_first_name_field_widget(self):
-        form = AuthorForm()        
-        self.assertTrue(form.fields['first_name'].placeholder == None or form.fields['first_name'].placeholder == 'write author name')
-'''
-'''
-    def test_renew_form_date_field_help_text(self):
-        form = RenewBookForm()
-        self.assertEqual(form.fields['renewal_date'].help_text,'Enter a date between now and 4 weeks (default 3).')
 
-    def test_renew_form_date_in_past(self):
-        date = datetime.date.today() - datetime.timedelta(days=1)
-        form_data = {'renewal_date': date}
-        form = RenewBookForm(data=form_data)
-        self.assertFalse(form.is_valid())
+class BookFormTest(TestCase):
 
-    def test_renew_form_date_too_far_in_future(self):
-        date = datetime.date.today() + datetime.timedelta(weeks=4) + datetime.timedelta(days=1)
-        form_data = {'renewal_date': date}
-        form = RenewBookForm(data=form_data)
-        self.assertFalse(form.is_valid())
+    def test_read_date_field_label(self):
+        form = BookForm()
+        self.assertTrue(form.fields['read_date'].label == None or form.fields['read_date'].label == 'Read date')
 
-    def test_renew_form_date_today(self):
+    def test_read_date_field_help_text(self):
+        form = BookForm()
+        self.assertEqual(form.fields['read_date'].help_text,'Enter a read date in the past')
+'''    
+    def test_read_date_in_the_past(self):
+        date = datetime.date.today()- datetime.timedelta(days=2)
+        form_data = {'read_date': date}
+        form = BookForm(data=form_data)        
+        self.assertTrue(form.is_valid())
+
+    def test_read_date_in_the_future(self):
         date = datetime.date.today()
-        form_data = {'renewal_date': date}
-        form = RenewBookForm(data=form_data)
-        self.assertTrue(form.is_valid())
-        
-    def test_renew_form_date_max(self):
-        date = timezone.now() + datetime.timedelta(weeks=4)
-        form_data = {'renewal_date': date}
-        form = RenewBookForm(data=form_data)
-        self.assertTrue(form.is_valid())
-'''
+        form_data = {'read_date': date}
+        form = BookForm(data=form_data)
+        self.assertFalse(form.is_valid())'''

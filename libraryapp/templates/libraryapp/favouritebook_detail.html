@@ -1,15 +1,20 @@
 {% extends "base_generic.html" %}
 
 {% block content %}
-  <h1>Title: {{ favouritebook }}</h1>
+  <h1>Title: {{ favouritebook.book.title }}</h1>
 
-  <p><strong>Liking:</strong> {{ favouritebook.liking }}</p>
+  <p><strong>Author:</strong> <a href="">{{ favouritebook.book.author }}</a></p> <!-- author detail link not yet defined -->
+  <p><strong>Summary:</strong> {{ favouritebook.book.summary }}</p>
+  <p><strong>Language:</strong> {{ favouritebook.book.language }}</p>
+  <p><strong>Genre:</strong> {{ favouritebook.book.genre }}</p> 
+  <p><strong>Tags:</strong> {% for tag in favouritebook.book.tag.all %} {{ tag }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+  <p><strong>Book format:</strong> {{ favouritebook.book.get_book_format_display }}</p> 
+  <p><strong>Read date:</strong> {{ favouritebook.book.read_date }}</p> 
+  <p><strong>Liked by:</strong> {{ favouritebook.liking }}</p> 
+
+  {% if perms.libraryapp.can_mark_as_favourite %}
+  <a href="{% url 'favouritebook_delete' favouritebook.id %}">Delete from favourites</a>
+  {% endif %}
 
 {% endblock %}
 
-<!--
-  {% if perms.libraryapp.can_edit %}
-  <a href="{% url 'book_update' favbook.id %}">Update</a> |
-  <a href="{% url 'book_delete' favbook.id %}">Delete</a>
-  {% endif %}
-!-->

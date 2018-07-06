@@ -2,8 +2,7 @@ from django import forms
 
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
-import datetime #for checking renewal date range.
-
+import datetime #
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.forms import ModelForm
 from .models import Author, Book
@@ -26,7 +25,7 @@ class AuthorForm(PermissionRequiredMixin, ModelForm):
         super(AuthorForm, self).__init__(*args, **kwargs)
 
 
-class BookForm(PermissionRequiredMixin, ModelForm):
+class BookForm(ModelForm):
     class Meta:
         model = Book
         fields = ['title', 'author', 'summary', 'tag', 'genre', 'language', 'book_format', 'read_date']
@@ -46,6 +45,16 @@ class BookForm(PermissionRequiredMixin, ModelForm):
         self.request = kwargs.pop('request', None)
         # print(self.request.user)
         super(BookForm, self).__init__(*args, **kwargs)
+
+''' to nie jest chyba potrzebne bo już mam podobny wpis w MODELS
+    def clean_read_date(self):
+       data = self.cleaned_data['read_date']
+       #Check date is in range librarian allowed to change (+4 weeks)
+       if data > datetime.date.today() + datetime.timedelta(days=1):
+           raise ValidationError('Invalid date - read date in the future - FORMS')
+       # Remember to always return the cleaned data.
+       return data
+'''
 
 '''
 class AddToFavourites(forms.Form):

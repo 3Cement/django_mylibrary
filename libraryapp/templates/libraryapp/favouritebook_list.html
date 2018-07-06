@@ -2,12 +2,13 @@
 
 {% block content %}
     <h1>My Favourite Books</h1>
+    <h3>User: {{ user.get_username }}</h3>
 
     {% if favouritebook_list %}
     <ul>
 
       {% for favbook in favouritebook_list %}
-        <li><a href="{% url 'favbook-detail' favbook.id %}">{{ favbook.book }}, {{ favbook.liking }}</a></li>
+        <li><a href="{% url 'favbook-detail' favbook.id %}">{{ favbook.book }}</a></li>
       {% endfor %}
     </ul>
 

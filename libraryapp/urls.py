@@ -23,7 +23,8 @@ urlpatterns = [
     path('favbook/<int:pk>', views.FavouriteBookDetailView.as_view(), name='favbook-detail'),
     path('all-favbooks/', views.FavouriteBookAllListView.as_view(), name='all-favbooks'),
     path('book/<int:pk>/addfav/', views.add_book_to_favourites, name='add_book_to_favourites'),
-    path('favbooks/create/', views.FavouriteBookCreate.as_view(), name='favouritebook_form'),
+    #path('favbooks/create/', views.FavouriteBookCreate.as_view(), name='favouritebook_form'),
+    path('favbooks/<int:pk>/delete/', views.FavouriteBookDelete.as_view(), name='favouritebook_delete'),
 
     path('tags/', views.TagListView.as_view(), name='tags'),
     path('tag/<int:pk>', views.TagDetailView.as_view(), name='tag-detail'),

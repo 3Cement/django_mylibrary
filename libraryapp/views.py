@@ -51,14 +51,14 @@ def index(request):
 
 class BookListView(generic.ListView):
     model = Book
-    paginate_by = 10 # number of books at one site
+    paginate_by = 10
 
 class BookDetailView(generic.DetailView):
     model = Book
 
 class AuthorListView(generic.ListView):
     model = Author
-    paginate_by = 10 # number of books at one site
+    paginate_by = 10
 
 class AuthorDetailView(generic.DetailView):
     model = Author
@@ -68,17 +68,17 @@ class TagDetailView(generic.DetailView):
 
 class TagListView(generic.ListView):
     model = Tag
-    paginate_by = 10 # number of books at one site
+    paginate_by = 10
 
 class FavouriteBookDetailView(generic.DetailView):
     model = FavouriteBook
 
-class FavouriteBookListView(PermissionRequiredMixin, generic.ListView):
+class FavouriteBookListView(LoginRequiredMixin, generic.ListView):
     """Generic class-based view current user favorite books. """
     model = FavouriteBook
-    permission_required = 'libraryapp.can_view_all_favourites'
+    permission_required = 'libraryapp.can_mark_as_favourite'
     template_name ='libraryapp/favouritebook_list.html'
-    paginate_by = 10 # number of books at one site
+    paginate_by = 10
 
     def get_queryset(self):
         return FavouriteBook.objects.filter(liking=self.request.user)
@@ -87,8 +87,8 @@ class FavouriteBookAllListView(PermissionRequiredMixin, generic.ListView):
     """Generic class-based view all users favorite books. """
     model = FavouriteBook
     permission_required = 'libraryapp.can_view_all_favourites'
-    template_name ='libraryapp/favouritebookall_list.html'
-    paginate_by = 10 # number of books at one site
+    template_name ='libraryapp/favouritebook_list_all.html'
+    paginate_by = 10
 
     def get_queryset(self):
         return FavouriteBook.objects.all()
@@ -99,10 +99,11 @@ def author_create(request):
         if form.is_valid():
             form.save()
             messages.success(request, ('Author has been created!'))
-            return redirect('/')
+            return redirect('authors')
         else:
             form = AuthorForm()
-            return redirect('/')
+            messages.success(request, ('You AuthorForm is invalid'))
+            return redirect('authors')
     else:
         form = AuthorForm()
     return render(request, 'libraryapp/author_form.html', {'form': form})
@@ -113,35 +114,36 @@ def book_create(request):
         if form.is_valid():
             form.save()
             messages.success(request, ('Book has been created!'))
-            return redirect('/')
+            return redirect('books')
         else:
             form = BookForm()
-            return redirect('/')
+            messages.success(request, ('You BookForm is invalid'))
+            return redirect('books')
     else:
         form = BookForm()
-    return render(request, 'libraryapp/book_form.html', { 'form': form, })
+    return render(request, 'libraryapp/book_form.html', { 'form': form, },)
 
+'''
 class AuthorCreate(PermissionRequiredMixin, CreatePopupMixin, CreateView):
     model = Author
     fields = ['first_name', 'last_name'] 
     permission_required = 'libraryapp.can_edit'
-
+'''
 class AuthorUpdate(PermissionRequiredMixin, UpdateView):
     model = Author
     fields = ['first_name', 'last_name']
     permission_required = 'libraryapp.can_edit'
-    template_name = 'author_form.html'
 
 class AuthorDelete(PermissionRequiredMixin, DeleteView):
     model = Author
     success_url = reverse_lazy('authors')
     permission_required = 'libraryapp.can_edit'
-
+'''
 class BookCreate(PermissionRequiredMixin, CreateView):
     model = Book
     fields = ['title', 'author', 'summary', 'tag', 'genre', 'language', 'book_format', 'read_date']
     permission_required = 'libraryapp.can_edit'
-
+'''
 class BookUpdate(PermissionRequiredMixin, UpdateView):
     model = Book
     fields = '__all__'
@@ -167,19 +169,27 @@ class TagDelete(PermissionRequiredMixin, DeleteView):
     model = Tag
     success_url = reverse_lazy('tags')
     permission_required = 'libraryapp.can_edit'
-
+'''
 class FavouriteBookCreate(PermissionRequiredMixin, CreatePopupMixin, CreateView):
     model = FavouriteBook
     fields = ['book', 'liking'] 
-    permission_required = 'libraryapp.can_edit'
+    permission_required = 'libraryapp.can_mark_as_favourite'
+'''
+class FavouriteBookDelete(PermissionRequiredMixin, DeleteView):
+    model = FavouriteBook
+    success_url = reverse_lazy('favbooks')
+    permission_required = 'libraryapp.can_mark_as_favourite'
 
+@permission_required('libraryapp.can_mark_as_favourite')
 def add_book_to_favourites(request, pk):
     book=get_object_or_404(Book, pk = pk)
     if FavouriteBook.objects.filter(book=book, liking=request.user).exists():
-        print('You already have this book in favorites')
+        messages.success(request, ('You already have this book in favorites!'))
+        return HttpResponseRedirect(reverse('books') )
     else:
         fav_book = FavouriteBook.objects.create(book=book, liking=request.user)
-    return HttpResponseRedirect(reverse('favbooks') )
+        messages.success(request, ('Book added to favourites!'))
+        return HttpResponseRedirect(reverse('favbooks') )
 
 
 '''
