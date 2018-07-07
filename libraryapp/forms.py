@@ -10,7 +10,7 @@ from .models import Author, Book
 from django.urls import reverse_lazy
 from django_addanother.widgets import AddAnotherWidgetWrapper, AddAnotherEditSelectedWidgetWrapper
 
-class AuthorForm(PermissionRequiredMixin, ModelForm):
+class AuthorForm(ModelForm):
     class Meta:
         model = Author
         fields = ['first_name', 'last_name']

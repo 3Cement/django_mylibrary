@@ -59,10 +59,7 @@ class Book(models.Model):
     	)
     book_format = models.CharField(max_length=1, choices=formats, blank=True, default='p', help_text='Book format')
     read_date = models.DateField(help_text='Enter a read date in the past', null=True, blank=True)
-
-    def __init__(self, *args, **kwargs):
-        super(Book, self).__init__(*args, **kwargs)
-        self.__old_read_date = self.read_date
+    print(type(read_date))
     
     class Meta:
         ordering = ['-id']
@@ -72,9 +69,13 @@ class Book(models.Model):
         return reverse('book-detail', args=[str(self.id)])
 
     def clean(self):
-        " Make sure date cannot be in the past "
-        if (not self.id or self.__old_read_date != self.read_date) and self.read_date >= datetime.date.today():           
+        if not self.read_date:
+            self.read_date = None
+        #" Make sure date cannot be in the past "
+        elif self.read_date >= datetime.date.today():           
             raise ValidationError('Read date cannot be in the future - MODELS.')
+        else:
+            return read_date
 
     def __str__(self):
         """String for representing the Book object."""
