@@ -58,6 +58,7 @@ $ python3 manage.py migrate
 ```
 $ python manage.py runserver
 ```
+## Screenshots
 
 After runserver you should see something like that in your localhost (deafult port: http://127.0.0.1:8000/)
 
