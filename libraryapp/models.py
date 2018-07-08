@@ -59,7 +59,6 @@ class Book(models.Model):
     	)
     book_format = models.CharField(max_length=1, choices=formats, blank=True, default='p', help_text='Book format')
     read_date = models.DateField(help_text='Enter a read date in the past', null=True, blank=True)
-    print(type(read_date))
     
     class Meta:
         ordering = ['-id']
@@ -75,7 +74,7 @@ class Book(models.Model):
         elif self.read_date >= datetime.date.today():           
             raise ValidationError('Read date cannot be in the future - MODELS.')
         else:
-            return read_date
+            return self.read_date
 
     def __str__(self):
         """String for representing the Book object."""
